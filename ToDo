@@ -1,0 +1,5 @@
+1- implement an input (string) function
+2- implement a tokenizer (generate token stream)
+3- list the known c/c++ statements
+4- impelemnt the statements table generator functions
+5- compare all tokens with the list of statements, if equal, add to statements table
