@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <string>
+#include <regex>
 
 using namespace std;
 
@@ -16,103 +17,79 @@ struct Token {
     string lexeme;
 };
 
+
+class LexerRegex {
+public:
+    static bool matchOperator(const std::string& str);
+};
+
+bool LexerRegex::matchOperator(const std::string& str) {
+    // Regular expression pattern for operators:
+    static const std::regex operatorPattern("[\\+\\-\\*\\/=]");
+    return std::regex_match(str, operatorPattern);
+}
+
+
 class Lexer {
 public:
     Lexer(const string& input) : input(input), position(0) {}
 
-Token getNextToken() {
-    Token token;
+    Token getNextToken() {
+        Token token;
 
-    // Skip whitespace
-    while (isWhitespace(input[position]))
-        position++;
+        // Skip whitespace
+        while (position < input.length() && isspace(input[position]))
+            position++;
 
-    // Check for end of input
-    if (position >= input.length() ) {
-        token.type = TOKEN_UNKNOWN;
+        // Check for end of input
+        if (position >= input.length()) {
+            token.type = TOKEN_UNKNOWN;
+            return token;
+        }
+
+        // Handle identifiers
+        if (isalpha(input[position])) {
+            // Find the end of the identifier
+            size_t end = position + 1;
+            while (end < input.length() && isalnum(input[end]))
+                end++;
+            token.lexeme = input.substr(position, end - position);
+            token.type = TOKEN_IDENTIFIER;
+            position = end;
+        }
+        // Handle numbers
+        else if (isdigit(input[position])) {
+            // Find the end of the number
+            size_t end = position + 1;
+            while (end < input.length() && isdigit(input[end]))
+                end++;
+            token.lexeme = input.substr(position, end - position);
+            token.type = TOKEN_NUMBER;
+            position = end;
+        }
+        // Handle operators
+        else if (LexerRegex::matchOperator(input.substr(position, 1))) {
+            token.lexeme = input.substr(position, 1);
+            token.type = TOKEN_OPERATOR;
+            position++;
+        }
+        // Skip unknown characters
+        else {
+            token.lexeme = input.substr(position, 1);
+            token.type = TOKEN_UNKNOWN;
+            position++;
+        }
+
         return token;
     }
-
-    // Handle identifiers
-    if (isAlpha(input[position])) {
-        token.type = TOKEN_IDENTIFIER;
-        token.lexeme = readIdentifier();
-    }
-    // Handle numbers
-    else if (isDigit(input[position])) {
-        token.type = TOKEN_NUMBER;
-        token.lexeme = readNumber();
-    }
-    // Handle operators
-    else if (isOperator(input[position])) {
-        token.type = TOKEN_OPERATOR;
-        token.lexeme = readOperator();
-    }
-    // Skip unknown characters
-    else {
-        token.type = TOKEN_UNKNOWN;
-        token.lexeme = input[position];
-        position++;
-        return token; // Skip to the next character
-    }
-
-    return token;
-}
-
 
 private:
     const string input;
     size_t position;
-
-    bool isWhitespace(char ch) {
-        return ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r';
-    }
-
-    bool isAlpha(char ch) {
-        return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
-    }
-
-    bool isDigit(char ch) {
-        return ch >= '0' && ch <= '9';
-    }
-
-    bool isOperator(char ch) {
-        return ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '=';
-    }
-
-    string readIdentifier() {
-        string identifier;
-        while (isAlphaNumeric(input[position])) {
-            identifier += input[position];
-            position++;
-        }
-        return identifier;
-    }
-
-    bool isAlphaNumeric(char ch) {
-        return isAlpha(ch) || isDigit(ch);
-    }
-
-    string readNumber() {
-        string number;
-        while (isDigit(input[position])) {
-            number += input[position];
-            position++;
-        }
-        return number;
-    }
-
-    string readOperator() {
-        string op;
-        op += input[position];
-        position++;
-        return op;
-    }
 };
 
 int main() {
     string input = "x = 10 + 20 * y";
-
     Lexer lexer(input);
     Token token;
 
@@ -133,7 +110,7 @@ int main() {
                 cout << "Unknown" << endl;
                 break;
         }
-    } while (token.type != TOKEN_UNKNOWN && token.lexeme != "\0");
+    } while (token.type != TOKEN_UNKNOWN);
 
     return 0;
 }
