@@ -251,7 +251,6 @@ private:
 
 
     bool isDelimiter(char c) {
-        // Define your delimiters here
         string delimiters = " \t\n\r";
         return delimiters.find(c) != string::npos;
     }
