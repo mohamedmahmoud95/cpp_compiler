@@ -12,6 +12,7 @@ enum TokenType {
     TOKEN_BINARY,
     TOKEN_HEX,
     TOKEN_OCTAL,
+
     TOKEN_ADDOP,
     TOKEN_SUBOP,
     TOKEN_MULOP,
@@ -39,6 +40,13 @@ enum TokenType {
     TOKEN_XORASSIGNOP,
     TOKEN_LEFTASSIGNOP,
     TOKEN_RIGHTASSIGNOP,
+// =======
+//     TOKEN_BOPERATOR,
+//     TOKEN_UOPERATOR,
+//     TOKEN_LOGICALOPERATOR,
+//     TOKEN_RELATIONALOPERATORS,
+//     TOKEN_ASSIGNMENTOPERATOR,
+// >>>>>>> Mohamed-Raslan
     TOKEN_TERNARYOPERATOR,
     TOKEN_KEYWORD,
     TOKEN_DATATYPE,
@@ -91,7 +99,11 @@ bool LexerRegex::matchAssignmentOperator(const std::string& str) {
 
 bool LexerRegex::matchBinaryOperator(const std::string& str) {
     // Regular expression pattern for binary operators:
+//<<<<<<< Yasminas
     static const std::regex binaryoperatorPattern("[\\+\\-\\*%]");
+// =======
+//     static const std::regex binaryoperatorPattern("[\\+\\-\\*]");
+// >>>>>>> Mohamed-Raslan
     return std::regex_match(str, binaryoperatorPattern);
 }
 
@@ -193,11 +205,19 @@ private:
     string currentBuffer;
     string nextBuffer;
     const size_t bufferSize;
+// <<<<<<< Yasminas
 
     void swapBuffers() {
         // Move content of next buffer to current buffer
         currentBuffer = nextBuffer;
 
+// =======
+
+//     void swapBuffers() {
+//         // Move content of next buffer to current buffer
+//         currentBuffer = nextBuffer;
+
+// >>>>>>> Mohamed-Raslan
         // Load new content into next buffer
         size_t nextBufferStartPosition = position + currentBuffer.length();
         nextBuffer = input.substr(nextBufferStartPosition, bufferSize);
@@ -407,10 +427,27 @@ private:
                 token.type = TOKEN_LTEOP;
             }
         }
+
+//         }
+//         else if (LexerRegex::matchAssignmentOperator(token.lexeme)) {
+//             token.type = TOKEN_ASSIGNMENTOPERATOR;
+//         }
+//         else if (LexerRegex::matchUnaryOperator(token.lexeme)) {
+//             token.type = TOKEN_UOPERATOR;
+//         }
+//         else if (LexerRegex::matchBinaryOperator(token.lexeme)) {
+//             token.type = TOKEN_BOPERATOR;
+//         }
+//         else if (LexerRegex::matchlogicalOperator(token.lexeme)) {
+//             token.type = TOKEN_LOGICALOPERATOR;
+//         }
+//         else if (LexerRegex::matchRelationalOperator(token.lexeme)) {
+//             token.type = TOKEN_RELATIONALOPERATORS;
+//         }
         else if (LexerRegex::matchTernaryOperator(token.lexeme)) {
             token.type = TOKEN_TERNARYOPERATOR;
         }
-
+    
         else if (LexerRegex::matchPunc(token.lexeme)) {
             token.type = PUNCTUATION;
         }
@@ -534,6 +571,7 @@ int main() {
         case TOKEN_RIGHTASSIGNOP:
             cout << "RIGHTASSIGNOP" << endl;
             break;
+
         case TOKEN_TERNARYOPERATOR:
             cout << "Ternary Operator" << endl;
             break;
@@ -552,3 +590,4 @@ int main() {
 
     return 0;
 }
+
