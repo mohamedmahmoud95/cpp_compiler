@@ -89,6 +89,7 @@ public:
     static bool matchBinaryOperator(const std::string& str);
     static bool matchUnaryOperator(const std::string& str);
     static bool matchlogicalOperator(const std::string& str);
+    static bool matchBitwiseOperator(const std::string& str);
     static bool matchRelationalOperator(const std::string& str);
     static bool matchAssignmentOperator(const std::string& str);
     static bool matchTernaryOperator(const std::string& str);
@@ -117,6 +118,12 @@ bool LexerRegex::matchlogicalOperator(const std::string& str) {
     return std::regex_match(str, logicalOperatorPattern);
 }
 
+bool LexerRegex::matchBitwiseOperator(const std::string& str) {
+    static const std::regex bitwiseOperatorPattern("&|\\||\\^|~");
+    return std::regex_match(str, bitwiseOperatorPattern);
+}
+
+
 bool LexerRegex::matchAssignmentOperator(const std::string& str) {
     static const std::regex assignmentOpPattern("=|\\+=|\\-=|\\*=|/=|%=|&=|\\|=|\\^=|<<=|>>=");
     return std::regex_match(str, assignmentOpPattern);
@@ -124,11 +131,7 @@ bool LexerRegex::matchAssignmentOperator(const std::string& str) {
 
 bool LexerRegex::matchBinaryOperator(const std::string& str) {
     // Regular expression pattern for binary operators:
-//<<<<<<< Yasminas
     static const std::regex binaryoperatorPattern("[\\+\\-\\*%]");
-// =======
-//     static const std::regex binaryoperatorPattern("[\\+\\-\\*]");
-// >>>>>>> Mohamed-Raslan
     return std::regex_match(str, binaryoperatorPattern);
 }
 
@@ -176,7 +179,7 @@ bool LexerRegex::matchOctal(const std::string& str) {
 bool LexerRegex::matchPunc(const std::string& str) {
     // Regular expression pattern for punctuation:
     // static const std::regex PuncPattern("\\(|\\)|,|;|;\\{|\\}");
-    static const std::regex PuncPattern("\\(|\\)|\\{|\\}|\\[|\\]|,|\\.|;|:|\\?|'|\"|`|\\\\|\\n");
+    static const std::regex PuncPattern("\\(|\\)|\\{|\\}|\\[|\\]|,|\\.|;|:|\\?|'|\"|`|\\\\|\\n|#");
     return std::regex_match(str, PuncPattern);
 }
 
@@ -236,14 +239,6 @@ private:
     void swapBuffers() {
         // Move content of next buffer to current buffer
         currentBuffer = nextBuffer;
-
-// =======
-
-//     void swapBuffers() {
-//         // Move content of next buffer to current buffer
-//         currentBuffer = nextBuffer;
-
-// >>>>>>> Mohamed-Raslan
         // Load new content into next buffer
         size_t nextBufferStartPosition = position + currentBuffer.length();
         nextBuffer = input.substr(nextBufferStartPosition, bufferSize);
@@ -302,6 +297,7 @@ private:
         else if (
             LexerRegex::matchAssignmentOperator(buffer.substr(0, 2)) ||
             LexerRegex::matchlogicalOperator(buffer.substr(0, 2)) ||
+            LexerRegex::matchBitwiseOperator(buffer.substr(0, 2)) ||
             LexerRegex::matchRelationalOperator(buffer.substr(0, 2)) ||
             LexerRegex::matchTernaryOperator(buffer.substr(0, 2)) ||
             LexerRegex::matchUnaryOperator(buffer.substr(0, 2)) ||
@@ -387,6 +383,24 @@ private:
                 token.type = TOKEN_RIGHTASSIGNOP;
             }
         }
+
+         else if (LexerRegex::matchBitwiseOperator(token.lexeme)) {
+            if (token.lexeme == "&") {
+                token.type = TOKEN_Bitwise_AND;
+            }
+            else if (token.lexeme == "&") {
+                token.type = TOKEN_Bitwise_AND;
+            }
+            else if (token.lexeme == "|") {
+                token.type = TOKEN_Bitwise_OR;
+            }
+            else if (token.lexeme == "^") {
+                token.type = TOKEN_Bitwise_XOR;
+            }
+            else if (token.lexeme == "~") {
+                token.type = TOKEN_Bitwise_NOT;
+            }
+          }
 
 
         else if (LexerRegex::matchUnaryOperator(token.lexeme)) {
@@ -538,7 +552,7 @@ private:
 
 int main() {
     // Sample input string
-    string input = "3.14e5 if x == y return 1; else return 0; while _cycle = 9; int frawla = 2098 ; int = --8++ ; [] [ ]  float zrka23elyamama = 0.221; 0b1010 12.345 0xABCD 0777 ;Ibrahim !Donia && ||; ()) === != % > < >= 8.98-- *= %= += -= <<= ^= ?: &= + - () [] {} \\ ? . , ; : # \n ' \" ";
+    string input = "3.14e5 if x == y return 1; else return 0; while _cycle = 9; int frawla = 2098 ; int = --8++ ; [] [ ]  float zrka23elyamama = 0.221; 0b1010 12.345 0xABCD 0777 ;Ibrahim !Donia && ||; ()) === != % > < >= 8.98-- *= %= += -= <<= ^= ?: &= + - () [] {} \\ ? . , ; : # \n ' \" & | ^ ~";
 
     Lexer lexer(input);
     Token token;
@@ -714,10 +728,27 @@ int main() {
         case PUNCTUATION:
             cout << "Punctuation" << endl;
             break;
-        }
+        
         //==================================================
 
 
+        //==================================================
+        // BITWISE_OPERATORS:
+        case TOKEN_Bitwise_AND:
+            cout << "Bitwise AND" << endl;
+            break;
+        case TOKEN_Bitwise_OR:
+            cout << "Bitwise OR" << endl;
+            break;
+        case TOKEN_Bitwise_XOR:
+            cout << "Bitwise XOR" << endl;
+            break;
+        case TOKEN_Bitwise_NOT:
+            cout << "Bitwise NOT" << endl;
+            break;
+        //==================================================
+
+        }
     } while (token.lexeme != "");
 
     return 0;
