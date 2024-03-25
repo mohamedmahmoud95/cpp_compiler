@@ -12,7 +12,6 @@ enum TokenType {
     TOKEN_BINARY,
     TOKEN_HEX,
     TOKEN_OCTAL,
-
     TOKEN_ADDOP,
     TOKEN_SUBOP,
     TOKEN_MULOP,
@@ -40,18 +39,44 @@ enum TokenType {
     TOKEN_XORASSIGNOP,
     TOKEN_LEFTASSIGNOP,
     TOKEN_RIGHTASSIGNOP,
-// =======
 //     TOKEN_BOPERATOR,
 //     TOKEN_UOPERATOR,
 //     TOKEN_LOGICALOPERATOR,
 //     TOKEN_RELATIONALOPERATORS,
 //     TOKEN_ASSIGNMENTOPERATOR,
-// >>>>>>> Mohamed-Raslan
     TOKEN_TERNARYOPERATOR,
     TOKEN_KEYWORD,
     TOKEN_DATATYPE,
     TOKEN_UNKNOWN,
-    PUNCTUATION
+    PUNCTUATION,
+
+    //=========================
+    // Bitwise tokens:
+    TOKEN_Bitwise_AND,     // &
+    TOKEN_Bitwise_OR,      // |
+    TOKEN_Bitwise_XOR,     // ^
+    TOKEN_Bitwise_NOT,     // ~
+    //=========================
+
+    //=========================
+    // PUNCTUATIONAL tokens:
+    TOKEN_LEFT_PAREN,      // (
+    TOKEN_RIGHT_PAREN,     // )
+    TOKEN_LEFT_BRACE,      // {
+    TOKEN_RIGHT_BRACE,     // }
+    TOKEN_LEFT_BRACKET,    // [
+    TOKEN_RIGHT_BRACKET,   // ]
+    TOKEN_COMMA,           // ,
+    TOKEN_PERIOD,          // .
+    TOKEN_SEMICOLON,       // ;
+    TOKEN_COLON,           // :
+    TOKEN_QUESTION,        // ?
+    TOKEN_QUOTE,           // '
+    TOKEN_DOUBLE_QUOTE,    // "
+    TOKEN_PREPROCESSOR_HASH, // #
+    TOKEN_BACKSLASH,       // '\'
+    TOKEN_NEWLINE,         // Newline
+    //=========================
 };
 
 struct Token {
@@ -150,7 +175,8 @@ bool LexerRegex::matchOctal(const std::string& str) {
 
 bool LexerRegex::matchPunc(const std::string& str) {
     // Regular expression pattern for punctuation:
-    static const std::regex PuncPattern("\\(|\\)|,|;|;\\{|\\}");
+    // static const std::regex PuncPattern("\\(|\\)|,|;|;\\{|\\}");
+    static const std::regex PuncPattern("\\(|\\)|\\{|\\}|\\[|\\]|,|\\.|;|:|\\?|'|\"|`|\\\\|\\n");
     return std::regex_match(str, PuncPattern);
 }
 
@@ -449,7 +475,60 @@ private:
         }
     
         else if (LexerRegex::matchPunc(token.lexeme)) {
+             if (token.lexeme == "(") {
+                token.type = TOKEN_LEFT_PAREN;
+            }
+            else if (token.lexeme == ")") {
+                token.type = TOKEN_RIGHT_PAREN;
+            }
+            else if (token.lexeme == "{") {
+                token.type = TOKEN_LEFT_BRACE;
+            }
+            else if (token.lexeme == "}") {
+                token.type = TOKEN_RIGHT_BRACE;
+            }
+            else if (token.lexeme == "[") {
+                token.type = TOKEN_LEFT_BRACKET;
+            }
+            else if (token.lexeme == "]") {
+                token.type = TOKEN_RIGHT_BRACKET;
+            }
+            else if (token.lexeme == "'") {
+                token.type = TOKEN_QUOTE;
+            }
+            else if (token.lexeme == "\"") {
+                token.type = TOKEN_DOUBLE_QUOTE;
+            }
+            else if (token.lexeme == ".") {
+                token.type = TOKEN_PERIOD;
+            }
+            else if (token.lexeme == ",") {
+                token.type = TOKEN_COMMA;
+            }
+            else if (token.lexeme == ";") {
+                token.type = TOKEN_SEMICOLON;
+            }
+            else if (token.lexeme == ":") {
+                token.type = TOKEN_COLON;
+            }
+            else if (token.lexeme == ".") {
+                token.type = TOKEN_PERIOD;
+            }
+            else if (token.lexeme == "?") {
+                token.type = TOKEN_QUESTION;
+            }
+            else if (token.lexeme == "#") {
+                token.type = TOKEN_PREPROCESSOR_HASH;
+            }
+            else if (token.lexeme == "\\") {
+                token.type = TOKEN_BACKSLASH;
+            }
+            else if (token.lexeme == "\n") {
+                token.type = TOKEN_NEWLINE;
+            }
+            else {
             token.type = PUNCTUATION;
+            }
         }
         else {
             token.type = TOKEN_UNKNOWN;
@@ -459,7 +538,7 @@ private:
 
 int main() {
     // Sample input string
-    string input = "3.14e5 if x == y return 1; else return 0; while _cycle = 9; int frawla = 2098 ; int = --8++ ; float zrka23elyamama = 0.221; 0b1010 12.345 0xABCD 0777 ;Ibrahim !Donia && ||; ()) === != % > < >= 8.98-- *= %= += -= <<= ^= ?: &= + - ";
+    string input = "3.14e5 if x == y return 1; else return 0; while _cycle = 9; int frawla = 2098 ; int = --8++ ; [] [ ]  float zrka23elyamama = 0.221; 0b1010 12.345 0xABCD 0777 ;Ibrahim !Donia && ||; ()) === != % > < >= 8.98-- *= %= += -= <<= ^= ?: &= + - () [] {} \\ ? . , ; : # \n ' \" ";
 
     Lexer lexer(input);
     Token token;
@@ -581,10 +660,63 @@ int main() {
         case TOKEN_DATATYPE:
             cout << "Datatype" << endl;
             break;
+
+        //==================================================
+        // PUNCTUATIONAL tokens:
+        case TOKEN_LEFT_PAREN:
+            cout << "Left parenthesis" << endl;
+            break;
+        case TOKEN_RIGHT_PAREN:
+            cout << "Right parenthesis" << endl;
+            break;
+        case TOKEN_LEFT_BRACE:
+            cout << "Left brace" << endl;
+            break;
+        case TOKEN_RIGHT_BRACE:
+            cout << "Right brace" << endl;
+            break;
+        case TOKEN_LEFT_BRACKET:
+            cout << "Left bracket" << endl;
+            break;
+        case TOKEN_RIGHT_BRACKET:
+            cout << "Right bracket" << endl;
+            break;
+        case TOKEN_COMMA:
+            cout << "Comma" << endl;
+            break;
+        case TOKEN_PERIOD:
+            cout << "Period" << endl;
+            break;
+        case TOKEN_SEMICOLON:
+            cout << "Semi-colon" << endl;
+            break;
+        case TOKEN_COLON:
+            cout << "Colon" << endl;
+            break;
+        case TOKEN_QUESTION:
+            cout << "Question" << endl;
+            break;
+        case TOKEN_QUOTE:
+            cout << "Quote" << endl;
+            break;
+        case TOKEN_DOUBLE_QUOTE:
+            cout << "Double quote" << endl;
+            break;
+        case TOKEN_PREPROCESSOR_HASH:
+            cout << "Preprocessor hash" << endl;
+            break;
+        case TOKEN_BACKSLASH:
+            cout << "Backslash" << endl;
+            break;
+        case TOKEN_NEWLINE:
+            cout << "Newline" << endl;
+            break;
         case PUNCTUATION:
             cout << "Punctuation" << endl;
             break;
         }
+        //==================================================
+
 
     } while (token.lexeme != "");
 
