@@ -1,9 +1,3 @@
-//
-//  lexer_regex.cpp
-//  lex
-//
-//  Created by Mohamed Raslan on 26/03/2024.
-//
 
 #include "lexer_regex.hpp"
 #include <regex>
