@@ -1,9 +1,4 @@
-//
-//  token_types.h
-//  lex
-//
-//  Created by Mohamed Raslan on 27/03/2024.
-//
+
 
 #ifndef token_types_h
 #define token_types_h
