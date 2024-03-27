@@ -1,9 +1,4 @@
-//
-//  function_to_print_token_type.cpp
-//  lex
-//
-//  Created by Mohamed Raslan on 27/03/2024.
-//
+
 
 #include "function_to_print_token_type.hpp"
 
