@@ -1,9 +1,4 @@
-//
-//  lexer.cpp
-//  lex
-//
-//  Created by Mohamed Raslan on 27/03/2024.
-//
+
 
 #include "lexer.hpp"
 #include "lexer_regex.hpp"
