@@ -1,9 +1,3 @@
-//
-//  lexer_regex.hpp
-//  lex
-//
-//  Created by Mohamed Raslan on 26/03/2024.
-//
 
 #ifndef lexer_regex_hpp
 #define lexer_regex_hpp
