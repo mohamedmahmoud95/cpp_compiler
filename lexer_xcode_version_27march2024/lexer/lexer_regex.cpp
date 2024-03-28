@@ -1,4 +1,3 @@
-
 #include "lexer_regex.hpp"
 #include <regex>
 
@@ -43,13 +42,13 @@ bool LexerRegex::matchTernaryOperator(const std::string& str) {
 
 bool LexerRegex::matchKeyword(const std::string& str) {
     // Regular expression pattern for keywords:
-    static const std::regex keywordPattern("\\b(auto|break|case|char|const|continue|default|do|double|else|enum|extern|float|for|goto|if|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|void|volatile|while)\\b");
+    static const std::regex keywordPattern("\\b(auto|break|case|const|continue|default|do|else|enum|extern|for|goto|if|register|return|signed|sizeof|static|struct|switch|typedef|union|unsigned|void|volatile|while)\\b");
     return std::regex_match(str, keywordPattern);
 }
 
 bool LexerRegex::matchDatatype(const std::string& str) {
     // Regular expression pattern for datatypes:
-    static const std::regex datatypePattern("\\b(int|float|double)\\b");
+    static const std::regex datatypePattern("\\b(int|float|double|long|short|char|string)\\b");
     return std::regex_match(str, datatypePattern);
 }
 
