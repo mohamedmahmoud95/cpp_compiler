@@ -1,8 +1,6 @@
 
-
 #include "lexer.hpp"
 #include "lexer_regex.hpp"
-
 #include <iostream>
 #include <string>
 #include <regex>
@@ -90,7 +88,19 @@ void Lexer :: swapBuffers() {
                    if (hasSuffix) break; // More than one suffix
                    hasSuffix = true;
                }
+               
                end++;
+               if ((buffer[0] == '0' && (tolower(buffer[1] == 'x'))) || (buffer[0] == '0' && (tolower(buffer[1] == 'b')))) {
+                       end = 2; // Skip the '0x' prefix
+                       while (end < buffer.length() && isxdigit(buffer[end]))
+                           end++;
+                   }
+
+                   else {
+                       // Regular decimal number
+                       while (end < buffer.length() && isdigit(buffer[end]))
+                           end++;
+                   }
            }
 
            // Return the extracted lexeme
@@ -135,6 +145,8 @@ void Lexer :: swapBuffers() {
        std::string delimiters = " \t\n\r";
        return delimiters.find(c) != std::string::npos;
    }
+
+
 
    void  Lexer :: handleToken(Token& token) {
        if (isalpha(token.lexeme[0]) || token.lexeme[0] == '_') {
@@ -289,6 +301,7 @@ void Lexer :: swapBuffers() {
        else if (LexerRegex::matchTernaryOperator(token.lexeme)) {
            token.type = TOKEN_TERNARYOPERATOR;
        }
+       
    
        else if (LexerRegex::matchPunc(token.lexeme)) {
             if (token.lexeme == "(") {
@@ -346,6 +359,8 @@ void Lexer :: swapBuffers() {
            token.type = PUNCTUATION;
            }
        }
+       
+       
        else {
            token.type = TOKEN_UNKNOWN;
        }
