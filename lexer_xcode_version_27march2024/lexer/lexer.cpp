@@ -1,6 +1,6 @@
-
 #include "lexer.hpp"
 #include "lexer_regex.hpp"
+
 #include <iostream>
 #include <string>
 #include <regex>
@@ -20,10 +20,13 @@ Lexer:: Lexer(const std::string& input) : input(input), position(0), bufferSize(
 
 Token Lexer :: getNextToken() {
        Token token;
+    
+        // Skip whitespace, comments, and new lines:
+        skipWhiteSpaces();
+        skipComments();
+        skipNewLines();
+        skipWhiteSpaces(); // called for the second time to delete spaces after comments or multi-line comments
 
-       // Skip whitespace
-       while (position < currentBuffer.length() && isspace(currentBuffer[position]))
-           position++;
 
        // Check if current buffer is exhausted (lexer has consumed all the tokens)
        if (position >= currentBuffer.length() && nextBuffer.empty()) {
@@ -33,7 +36,7 @@ Token Lexer :: getNextToken() {
        }
 
        // Extract lexeme from current buffer
-       token.lexeme = extractLexeme(&currentBuffer[position]);
+    token.lexeme = extractLexeme(currentBuffer.substr(position));
 
        // Handle tokens and update position
        handleToken(token);
@@ -58,6 +61,37 @@ void Lexer :: swapBuffers() {
        size_t nextBufferStartPosition = position + currentBuffer.length();
        nextBuffer = input.substr(nextBufferStartPosition, bufferSize);
    }
+
+void Lexer::skipWhiteSpaces() {
+    // Skip whitespace and newline characters
+       while (position < currentBuffer.length() && (isspace(currentBuffer[position])))
+          position++;
+}
+
+void Lexer::skipComments() {
+    // Check for one-line comment
+    if (currentBuffer[position] == '/' && position + 1 < currentBuffer.length() && currentBuffer[position + 1] == '/') {
+        // Skip until the end of line
+        while (position < currentBuffer.length() && currentBuffer[position] != '\n')
+            position++;
+    }
+    // Check for multi-line comment
+    else if (currentBuffer[position] == '/' && position + 1 < currentBuffer.length() && currentBuffer[position + 1] == '*') {
+        // Skip until the end of the multi-line comment
+        while (position < currentBuffer.length() - 1 && !(currentBuffer[position] == '*' && currentBuffer[position + 1] == '/'))
+            position++;
+        // Move past the end of the multi-line comment
+        if (position < currentBuffer.length() - 1)
+            position += 2;
+    }
+}
+
+void Lexer::skipNewLines() {
+    // Skip whitespace and newline characters
+       if (position < currentBuffer.length() && (currentBuffer[position] == '\n'))
+          position++;
+}
+
 
    std:: string Lexer :: extractLexeme(const std::string& buffer) {
        size_t end = 0;
@@ -145,6 +179,8 @@ void Lexer :: swapBuffers() {
        std::string delimiters = " \t\n\r";
        return delimiters.find(c) != std::string::npos;
    }
+
+
 
 
 
@@ -360,6 +396,9 @@ void Lexer :: swapBuffers() {
            }
        }
        
+       else if (token.lexeme == " ") {
+           token.type = TOKEN_HEX;
+       }
        
        else {
            token.type = TOKEN_UNKNOWN;
