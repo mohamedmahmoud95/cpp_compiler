@@ -35,6 +35,12 @@ private:
     bool isDelimiter(char c);
     
     void handleToken(Token& token);
+    
+    void skipWhiteSpaces();
+
+    void skipComments();
+    
+    void skipNewLines();
 };
 
-#endif /* lexer_hpp */
+#endif 
