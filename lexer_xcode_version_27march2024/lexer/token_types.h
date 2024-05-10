@@ -68,6 +68,7 @@ enum TokenType {
     TOKEN_PERIOD,          // .
     TOKEN_SEMICOLON,       // ;
     TOKEN_COLON,           // :
+    TOKEN_NAME_SPECEFIER,  // ::
     TOKEN_QUESTION,        // ?
     TOKEN_QUOTE,           // '
     TOKEN_DOUBLE_QUOTE,    // "
@@ -77,5 +78,71 @@ enum TokenType {
     //=========================
 };
 
+
+const std::string tokenTypeNames[] = {
+  "Identifier",
+  "Number",
+  "Float",
+  "BinaryLiteral",
+  "HexadecimalLiteral",
+  "OctalLiteral",
+  "AdditionOperator",
+  "SubtractionOperator",
+  "MultiplicationOperator",
+  "DivisionOperator",
+  "ModuloOperator",
+  "IncrementOperator",
+  "DecrementOperator",
+  "LogicalAndOperator",
+  "LogicalOrOperator",
+  "LogicalNotOperator",
+  "EqualOperator",
+  "NotEqualOperator",
+  "GreaterThanOperator",
+  "LessThanOperator",
+  "GreaterThanOrEqualOperator",
+  "LessThanOrEqualOperator",
+  "AssignmentOperator",
+  "AddAndAssignOperator",
+  "SubtractAndAssignOperator",
+  "MultiplyAndAssignOperator",
+  "DivideAndAssignOperator",
+  "ModuloAndAssignOperator",
+  "LogicalAndAndAssignOperator",
+  "LogicalOrAndAssignOperator",
+  "BitwiseXorAndAssignOperator",
+  "LeftShiftAndAssignOperator",
+  "RightShiftAndAssignOperator",
+  "TernaryConditionalOperator",
+  "Keyword",
+  "DataType",
+  "UnknownToken",
+  "Punctuation",
+
+  // Bitwise tokens
+  "BitwiseAndOperator",
+  "BitwiseOrOperator",
+  "BitwiseXorOperator",
+  "BitwiseNotOperator",
+
+  // Punctuational tokens
+  "LeftParenthesis",
+  "RightParenthesis",
+  "LeftBrace",
+  "RightBrace",
+  "LeftBracket",
+  "RightBracket",
+  "Comma",
+  "Period",
+  "Semicolon",
+  "Colon",
+  "ScopeResolutionOperator",
+  "QuestionMark",
+  "SingleQuote",
+  "DoubleQuote",
+  "PreprocessorDirective",
+  "Backslash",
+  "NewlineCharacter",
+};
 
 #endif /* token_types_h */
