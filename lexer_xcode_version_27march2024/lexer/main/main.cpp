@@ -48,8 +48,10 @@ int main() {
 
     do {
         token = lexer.getNextToken();
-        cout << "Token: " << token.lexeme << ", Type: ";
-        tokenStreamFile << "Token: " << token.lexeme << ", Type: "<<tokenTypeNames[token.type]<<"\n";
+        //cout << "Token: " << token.lexeme << ", Type: ";
+        cout <<  "Token: " <<setw(10) << left << token.lexeme << setw(10) << right << "Type: " <<tokenTypeNames[token.type]<< endl;
+
+        tokenStreamFile << "Token: " <<setw(10) << left << token.lexeme << setw(10) << right << "Type: " <<tokenTypeNames[token.type]<< endl;
         if((isalpha(token.lexeme[0]) || token.lexeme[0] == '_')){
             identifiers.push_back(token.lexeme);
         }
