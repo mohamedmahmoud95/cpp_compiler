@@ -42,13 +42,13 @@ bool LexerRegex::matchTernaryOperator(const std::string& str) {
 
 bool LexerRegex::matchKeyword(const std::string& str) {
     // Regular expression pattern for keywords:
-    static const std::regex keywordPattern("\\b(auto|break|case|const|continue|default|do|else|enum|extern|for|goto|if|register|return|signed|sizeof|static|struct|switch|typedef|union|unsigned|void|volatile|while)\\b");
+    static const std::regex keywordPattern("\\b(auto|break|case|const|continue|default|do|else|enum|extern|for|goto|if|register|return|signed|sizeof|static|struct|switch|typedef|union|unsigned|void|volatile|while|inline|restrics|class|template|try|catch|throw|new|delete|public|private|protected|this|virtual|override|final|namespace|using)\\b");
     return std::regex_match(str, keywordPattern);
 }
 
 bool LexerRegex::matchDatatype(const std::string& str) {
     // Regular expression pattern for datatypes:
-    static const std::regex datatypePattern("\\b(int|float|double|long|short|char|string)\\b");
+    static const std::regex datatypePattern("\\b(bool|int|float|double|long|short|char|string)\\b");
     return std::regex_match(str, datatypePattern);
 }
 
@@ -79,6 +79,6 @@ bool LexerRegex::matchOctal(const std::string& str) {
 bool LexerRegex::matchPunc(const std::string& str) {
     // Regular expression pattern for punctuation:
     // static const std::regex PuncPattern("\\(|\\)|,|;|;\\{|\\}");
-    static const std::regex PuncPattern("\\(|\\)|\\{|\\}|\\[|\\]|,|\\.|;|:|\\?|'|\"|`|\\\\|\\n|#");
+    static const std::regex PuncPattern("\\(|\\)|\\{|\\}|\\[|\\]|,|\\.|;|::|:|\\?|'|\"|`|\\\\|\\n|#");
     return std::regex_match(str, PuncPattern);
 }
