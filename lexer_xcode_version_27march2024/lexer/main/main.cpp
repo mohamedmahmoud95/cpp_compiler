@@ -49,10 +49,11 @@ int main() {
     do {
         token = lexer.getNextToken();
         cout << "Token: " << token.lexeme << ", Type: ";
-        tokenStreamFile << "Token: " << token.lexeme << ", Type:  "<<"\n";
+        tokenStreamFile << "Token: " << token.lexeme << ", Type: "<<tokenTypeNames[token.type]<<"\n";
         if((isalpha(token.lexeme[0]) || token.lexeme[0] == '_')){
             identifiers.push_back(token.lexeme);
         }
+
           printTokenType(token);
     } while (token.lexeme != "");
     tokenStreamFile.close();
