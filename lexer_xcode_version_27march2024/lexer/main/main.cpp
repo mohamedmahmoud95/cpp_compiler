@@ -20,7 +20,7 @@ int main() {
     //If it says: "Error opening file: ", you probably need to change the path to the path where the file exists on your machine
     string filename = "/Users/mohamedraslan/Downloads/cpp_compiler-main/lexer_xcode_version_27march2024/lexer/input.txt";
 
-    
+
     ifstream inputFile(filename);
 
     // Error handling: Check if the file opened successfully
@@ -35,24 +35,28 @@ int main() {
     
     inputFile.close();
 
-    // Create the lexer with the input string
+   //  Create the lexer with the input string
        Lexer lexer(inputString);
-//
-//    // Sample input string
+
+    // Sample input string
 //    string input = "bool private public protected class template :: 3.14e5 if x == y return 1; else return 0; while _cycle = 9; int frawla = 2098 ; int = --8++ ; [] [ ]  float zrka23elyamama zrka23elyamama zrka23elyamama = 0.221; 0b1010 12.345 0xABCD 0777 ;Ibrahim !Donia && ||; ()) === != % > < >= 8.98-- *= %= += -= <<= ^= ?: &= + - () [] {} \\ ? . , ; : # \n ' \" & | ^ ~";
 //
 //    Lexer lexer(input);
     Token token;
 
+    ofstream tokenStreamFile("/Users/mohamedraslan/Downloads/cpp_compiler-main/lexer_xcode_version_27march2024/lexer/token_stream.txt");
+
     do {
         token = lexer.getNextToken();
         cout << "Token: " << token.lexeme << ", Type: ";
+        tokenStreamFile << "Token: " << token.lexeme << ", Type:  "<<"\n";
         if((isalpha(token.lexeme[0]) || token.lexeme[0] == '_')){
             identifiers.push_back(token.lexeme);
         }
-        printTokenType(token);
+          printTokenType(token);
     } while (token.lexeme != "");
-   
+    tokenStreamFile.close();
+
      
    
     extract_symbol_table_from_token_stream(identifiers);
@@ -71,12 +75,17 @@ void extract_symbol_table_from_token_stream(vector<string> identifiers){
 }
 
 void print_symbol_table(){
-    
+    ofstream symbolTableFile("/Users/mohamedraslan/Downloads/cpp_compiler-main/lexer_xcode_version_27march2024/lexer/symbol_table.txt");
+
     cout<<"\n\n================================================\n";
     cout<<"printing sybmol table:\n";
     for (const string& identifier : listOfUniqeIdentifiers) {
       cout << identifier << endl;
+        symbolTableFile << identifier << endl;
+
     }
     cout<<"================================================\n";
+    symbolTableFile.close();
+    
 
 }
