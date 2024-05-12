@@ -1,0 +1,27 @@
+digraph G {
+  "0x87520" [label="enum-expr"];
+  "0x86910" [label="enum"];
+  "0x87520" -> "0x86910";
+  "0x86910" [label="enum"][fontcolor="red"][color="red"];
+  "0x90230" [label="enum-expr-body"];
+  "0x87520" -> "0x90230";
+  "0x90230" [label="enum-expr-body"];
+  "0xb1b80" [label="identifier:\ncolors"];
+  "0x90230" -> "0xb1b80";
+  "0xb1b80" [label="identifier:\ncolors"][fontcolor="red"][color="red"];
+  "0xb2d70" [label="{"];
+  "0x90230" -> "0xb2d70";
+  "0xb2d70" [label="{"][fontcolor="red"][color="red"];
+  "0xae680" [label="enum-list"];
+  "0x90230" -> "0xae680";
+  "0xae680" [label="enum-list"];
+  "0xae9d0" [label="enumerator"];
+  "0xae680" -> "0xae9d0";
+  "0xae9d0" [label="enumerator"];
+  "0xaed20" [label="enumeration-constant:\nRed"];
+  "0xae9d0" -> "0xaed20";
+  "0xaed20" [label="enumeration-constant:\nRed"][fontcolor="red"][color="red"];
+  "0xb5c50" [label="}"];
+  "0x90230" -> "0xb5c50";
+  "0xb5c50" [label="}"][fontcolor="red"][color="red"];
+}
